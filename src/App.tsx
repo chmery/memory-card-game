@@ -55,27 +55,20 @@ function App() {
         setCards(updatedCards);
         flippedCards.current = updatedCards.filter((card) => card.isFlipped === true);
 
-        console.log(flippedCards);
-
-        if (flippedCards.current.length === 2) {
+        if (flippedCards.current.length === 2 && isMatch(flippedCards.current)) {
             const matchedValue = flippedCards.current[0].value;
-
-            if (isMatch(flippedCards.current)) {
-                handleCardsMatch(matchedValue);
-            }
+            handleCardsMatch(matchedValue);
         }
 
         if (flippedCards.current.length === 3) {
-            unflipCards();
+            setCards((prevCards) =>
+                prevCards.map((prevCard) => {
+                    return prevCard.id === id
+                        ? { ...prevCard, isFlipped: true }
+                        : { ...prevCard, isFlipped: false };
+                })
+            );
         }
-    };
-
-    const unflipCards = () => {
-        setCards((prevCards) =>
-            prevCards.map((prevCard) => {
-                return prevCard.isFlipped ? { ...prevCard, isFlipped: false } : prevCard;
-            })
-        );
     };
 
     const handleCardsMatch = useCallback((matchedValue: string) => {
@@ -86,9 +79,9 @@ function App() {
         );
     }, []);
 
-    const isMatch = useCallback((flippedCards: Card[]) => {
+    const isMatch = (flippedCards: Card[]) => {
         return flippedCards[0].value === flippedCards[1].value ? true : false;
-    }, []);
+    };
 
     return (
         <main className="max-w-[50rem] m-auto mt-4 px-2">
