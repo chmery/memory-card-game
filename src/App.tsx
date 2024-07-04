@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CardsBoard } from "./components/CardsBoard";
 import { UpperPanel } from "./components/UpperPanel";
+import { WinDialog } from "./components/WinDialog";
 
 export interface Card {
     id: string;
@@ -49,7 +50,10 @@ function App() {
     const [cards, setCards] = useState<Card[]>(() => getNewBoard());
     const [movesCount, setMovesCount] = useState(0);
     const [time, setTime] = useState(0);
-    const flippedCards = useRef<Card[] | []>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isTimerRunning, setIsTimerRunning] = useState(true);
+    const flippedCards = useRef<Card[] | null>(null);
+    const guessedCount = useRef(0);
 
     const handleCardFlip = (id: string) => {
         const updatedCards = cards.map((prevCard) =>
@@ -78,6 +82,7 @@ function App() {
     };
 
     const handleCardsMatch = useCallback((matchedValue: string) => {
+        guessedCount.current++;
         setCards((prevCards) =>
             prevCards.map((prevCard) =>
                 prevCard.value === matchedValue ? { ...prevCard, isGuessed: true } : prevCard
@@ -93,23 +98,48 @@ function App() {
         setCards(getNewBoard);
         setMovesCount(0);
         setTime(0);
+        setIsTimerRunning(true);
+        guessedCount.current = 0;
+    };
+
+    const handleDialogOpenChange = () => {
+        handleReset();
+        setIsDialogOpen((prevIsDialogOpen) => !prevIsDialogOpen);
     };
 
     useEffect(() => {
+        if (!isTimerRunning) return;
+
         const interval = setInterval(() => {
             setTime((prevTime) => ++prevTime);
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [time]);
+    }, [time, isTimerRunning]);
+
+    useEffect(() => {
+        if (guessedCount.current === cards.length / 2) {
+            setIsTimerRunning(false);
+            setIsDialogOpen(true);
+        }
+    }, [cards]);
 
     return (
-        <main className="max-w-[45rem] m-auto mt-4 px-2">
-            <h1 className="text-3xl italic font-black text-center mb-4">MEMORY CARD GAME</h1>
-            <UpperPanel onReset={handleReset} movesCount={movesCount} time={time} />
-            <CardsBoard cards={cards} onFlip={handleCardFlip} />
-            <div className="bg-secondary700 rounded-xl">content</div>
-        </main>
+        <>
+            <main className="max-w-[45rem] m-auto mt-4 px-2">
+                <h1 className="text-3xl italic font-black text-center mb-4">MEMORY CARD GAME</h1>
+                <UpperPanel onReset={handleReset} movesCount={movesCount} time={time} />
+                <CardsBoard cards={cards} onFlip={handleCardFlip} />
+                <div className="bg-secondary700 rounded-xl">content</div>
+            </main>
+            <WinDialog
+                movesCount={movesCount}
+                time={time}
+                onReset={handleReset}
+                isOpen={isDialogOpen}
+                onOpenChange={handleDialogOpenChange}
+            />
+        </>
     );
 }
 
