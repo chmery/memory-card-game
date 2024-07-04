@@ -47,8 +47,8 @@ function App() {
     };
 
     const [cards, setCards] = useState<Card[]>(() => getNewBoard());
-
     const flippedCards = useRef<Card[] | []>([]);
+    const moveCount = useRef(0);
 
     const handleCardFlip = (id: string) => {
         const updatedCards = cards.map((prevCard) =>
@@ -64,6 +64,8 @@ function App() {
         }
 
         if (flippedCards.current.length === 3) {
+            moveCount.current++;
+
             setCards((prevCards) =>
                 prevCards.map((prevCard) => {
                     return prevCard.id === id
@@ -86,10 +88,15 @@ function App() {
         return flippedCards[0].value === flippedCards[1].value ? true : false;
     };
 
+    const handleReset = () => {
+        setCards(getNewBoard);
+        moveCount.current = 0;
+    };
+
     return (
         <main className="max-w-[45rem] m-auto mt-4 px-2">
             <h1 className="text-3xl italic font-black text-center mb-4">MEMORY CARD GAME</h1>
-            <UpperPanel onReset={() => setCards(getNewBoard)} />
+            <UpperPanel onReset={handleReset} moveCount={moveCount.current} />
             <CardsBoard cards={cards} onFlip={handleCardFlip} />
             <div className="bg-secondary700 rounded-xl">content</div>
         </main>
