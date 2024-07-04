@@ -1,3 +1,12 @@
+interface Card {
+    id: string;
+    value: string;
+    isFlipped: boolean;
+    isGuessed: boolean;
+}
+
+const CARD_VALUES = ["😇", "👾", "🤖", "🤠", "👻", "😸", "🧠", "🧤", "🦴", "🥳", "👽", "💍"];
+
 function App() {
     return (
         <main className="max-w-[50rem] m-auto mt-4 px-2">
