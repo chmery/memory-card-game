@@ -12,5 +12,6 @@
     body {
         background: #232327;
         color: #ffff;
+        min-width: 320px;
     }
 }
