@@ -2,13 +2,15 @@ import { Card } from "../App";
 
 interface Props {
     card: Card;
+    onFlip: (id: string) => void;
 }
 
-export const CardItem = ({ card }: Props) => {
+export const CardItem = ({ card, onFlip }: Props) => {
     return (
         <div
-            className={`bg-primary600 rounded-lg aspect-square flex items-center justify-center ${
-                !card.isFlipped && "text-6xl font-black text-primary300 cursor-pointer"
+            onClick={() => onFlip(card.id)}
+            className={`bg-primary600 text-6xl aspect-square rounded-lg flex items-center justify-center ${
+                !card.isFlipped && "font-black text-primary300 cursor-pointer"
             }`}
         >
             {card.isFlipped || card.isGuessed ? card.value : "?"}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CardsBoard } from "./components/CardsBoard";
 
 export interface Card {
@@ -25,7 +25,7 @@ function App() {
     const getDuplicatedCards = (cards: Card[]) => {
         const duplicated = [];
         for (const card of cards) {
-            duplicated.push(card, card);
+            duplicated.push(card, { ...card, id: crypto.randomUUID() });
         }
         return duplicated;
     };
@@ -45,11 +45,19 @@ function App() {
         getShuffledCards(getDuplicatedCards(getCardObjects()))
     );
 
+    const handleCardFlip = (id: string) => {
+        setCards((prevCards) =>
+            prevCards.map((prevCard) =>
+                prevCard.id === id ? { ...prevCard, isFlipped: true } : prevCard
+            )
+        );
+    };
+
     return (
         <main className="max-w-[50rem] m-auto mt-4 px-2">
             <h1 className="text-3xl italic font-black text-center mb-4">MEMORY CARD GAME</h1>
             <div className="bg-secondary700 rounded-xl mb-4">content</div>
-            <CardsBoard cards={cards} />
+            <CardsBoard cards={cards} onFlip={handleCardFlip} />
             <div className="bg-secondary700 rounded-xl">content</div>
         </main>
     );
