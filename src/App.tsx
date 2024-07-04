@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { CardsBoard } from "./components/CardsBoard";
 
 export interface Card {
@@ -45,13 +45,50 @@ function App() {
         getShuffledCards(getDuplicatedCards(getCardObjects()))
     );
 
+    const flippedCards = useRef<Card[] | []>([]);
+
     const handleCardFlip = (id: string) => {
+        const updatedCards = cards.map((prevCard) =>
+            prevCard.id === id ? { ...prevCard, isFlipped: true } : prevCard
+        );
+
+        setCards(updatedCards);
+        flippedCards.current = updatedCards.filter((card) => card.isFlipped === true);
+
+        console.log(flippedCards);
+
+        if (flippedCards.current.length === 2) {
+            const matchedValue = flippedCards.current[0].value;
+
+            if (isMatch(flippedCards.current)) {
+                handleCardsMatch(matchedValue);
+            }
+        }
+
+        if (flippedCards.current.length === 3) {
+            unflipCards();
+        }
+    };
+
+    const unflipCards = () => {
         setCards((prevCards) =>
-            prevCards.map((prevCard) =>
-                prevCard.id === id ? { ...prevCard, isFlipped: true } : prevCard
-            )
+            prevCards.map((prevCard) => {
+                return prevCard.isFlipped ? { ...prevCard, isFlipped: false } : prevCard;
+            })
         );
     };
+
+    const handleCardsMatch = useCallback((matchedValue: string) => {
+        setCards((prevCards) =>
+            prevCards.map((prevCard) =>
+                prevCard.value === matchedValue ? { ...prevCard, isGuessed: true } : prevCard
+            )
+        );
+    }, []);
+
+    const isMatch = useCallback((flippedCards: Card[]) => {
+        return flippedCards[0].value === flippedCards[1].value ? true : false;
+    }, []);
 
     return (
         <main className="max-w-[50rem] m-auto mt-4 px-2">
