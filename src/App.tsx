@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CardsBoard } from "./components/CardsBoard";
 import { UpperPanel } from "./components/UpperPanel";
 
@@ -48,6 +48,7 @@ function App() {
 
     const [cards, setCards] = useState<Card[]>(() => getNewBoard());
     const [movesCount, setMovesCount] = useState(0);
+    const [time, setTime] = useState(0);
     const flippedCards = useRef<Card[] | []>([]);
 
     const handleCardFlip = (id: string) => {
@@ -91,12 +92,21 @@ function App() {
     const handleReset = () => {
         setCards(getNewBoard);
         setMovesCount(0);
+        setTime(0);
     };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime((prevTime) => ++prevTime);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [time]);
 
     return (
         <main className="max-w-[45rem] m-auto mt-4 px-2">
             <h1 className="text-3xl italic font-black text-center mb-4">MEMORY CARD GAME</h1>
-            <UpperPanel onReset={handleReset} movesCount={movesCount} />
+            <UpperPanel onReset={handleReset} movesCount={movesCount} time={time} />
             <CardsBoard cards={cards} onFlip={handleCardFlip} />
             <div className="bg-secondary700 rounded-xl">content</div>
         </main>
