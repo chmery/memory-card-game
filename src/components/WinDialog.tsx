@@ -21,7 +21,7 @@ export const WinDialog = ({ isOpen, onOpenChange, onReset, time, movesCount }: P
                     </Dialog.Title>
                     <Dialog.Description className="text-center mt-2 font-medium">
                         You completed the game in
-                        <span className="font-semibold">{movesCount}</span> moves and your final
+                        <span className="font-semibold"> {movesCount}</span> moves and your final
                         time is
                         <span className="font-semibold"> {getFormattedTime(time)}</span>.
                     </Dialog.Description>

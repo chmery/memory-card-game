@@ -9,14 +9,14 @@ interface Props {
 
 export const BoardSizeSelect = ({ selectedSize, onSelect }: Props) => {
     return (
-        <div className="bg-secondary700 rounded-xl flex items-center justify-between p-3 sm:p-4">
+        <div className="bg-secondary700 rounded-xl flex items-center justify-center p-3 sm:p-4 flex-wrap text-nowrap gap-3 sm:gap-6">
             <p className="font-semibold">Board size:</p>
-            <div className="flex gap-2">
+            <div className="flex flex-1 gap-2 sm:gap-4">
                 {BOARD_SIZES.map((size, i) => (
                     <button
                         key={i}
                         onClick={() => onSelect(size)}
-                        className={`text-center px-5 py-2 bg-secondary400 rounded-lg font-semibold hover:bg-secondary200 transition ${
+                        className={`text-center px-5 py-2 bg-secondary400 rounded-lg font-semibold hover:bg-secondary200 transition flex-1 ${
                             selectedSize === size && "bg-[#79798E]"
                         }`}
                     >

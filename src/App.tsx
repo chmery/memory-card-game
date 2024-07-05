@@ -140,7 +140,6 @@ function App() {
         }
     }, [cards]);
 
-    console.log(boardSize);
     return (
         <>
             <main className="max-w-[45rem] m-auto mt-4 px-2">
