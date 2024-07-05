@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CardsBoard } from "./components/CardsBoard";
 import { UpperPanel } from "./components/UpperPanel";
 import { WinDialog } from "./components/WinDialog";
+import { BoardSize, BoardSizeSelect } from "./components/BoardSizeSelect";
 
 export interface Card {
     id: string;
@@ -13,8 +14,17 @@ export interface Card {
 const CARD_VALUES = ["😇", "👾", "🤖", "🤠", "👻", "😸", "🧠", "🧤", "🦴", "🥳", "👽", "💍"];
 
 function App() {
-    const getCardObjects = () => {
-        return CARD_VALUES.map((value) => {
+    const [boardSize, setBoardSize] = useState<BoardSize>("4x4");
+
+    const calcCardsNeeded = useCallback(() => {
+        const [x, y] = boardSize.split("x");
+        return (+x * +y) / 2;
+    }, [boardSize]);
+
+    const getCardObjects = useCallback(() => {
+        const trimmedArray = CARD_VALUES.slice(0, calcCardsNeeded());
+
+        return trimmedArray.map((value) => {
             return {
                 id: crypto.randomUUID(),
                 value,
@@ -22,7 +32,7 @@ function App() {
                 isGuessed: false,
             };
         });
-    };
+    }, [calcCardsNeeded]);
 
     const getDuplicatedCards = (cards: Card[]) => {
         const duplicated = [];
@@ -43,9 +53,9 @@ function App() {
         return cardsCopy;
     };
 
-    const getNewBoard = () => {
+    const getNewBoard = useCallback(() => {
         return getShuffledCards(getDuplicatedCards(getCardObjects()));
-    };
+    }, [getCardObjects]);
 
     const [cards, setCards] = useState<Card[]>(() => getNewBoard());
     const [movesCount, setMovesCount] = useState(0);
@@ -94,18 +104,24 @@ function App() {
         return flippedCards[0].value === flippedCards[1].value ? true : false;
     };
 
-    const handleReset = () => {
+    const handleReset = useCallback(() => {
         setCards(getNewBoard);
         setMovesCount(0);
         setTime(0);
         setIsTimerRunning(true);
         guessedCount.current = 0;
-    };
+    }, [getNewBoard]);
 
     const handleDialogOpenChange = () => {
-        handleReset();
         setIsDialogOpen((prevIsDialogOpen) => !prevIsDialogOpen);
+        handleReset();
     };
+
+    const handleBoardSizeSelect = (selectedSize: BoardSize) => setBoardSize(selectedSize);
+
+    useEffect(() => {
+        handleReset();
+    }, [boardSize, handleReset]);
 
     useEffect(() => {
         if (!isTimerRunning) return;
@@ -130,7 +146,7 @@ function App() {
                 <h1 className="text-3xl italic font-black text-center mb-4">MEMORY CARD GAME</h1>
                 <UpperPanel onReset={handleReset} movesCount={movesCount} time={time} />
                 <CardsBoard cards={cards} onFlip={handleCardFlip} />
-                <div className="bg-secondary700 rounded-xl">content</div>
+                <BoardSizeSelect selectedSize={boardSize} onSelect={handleBoardSizeSelect} />
             </main>
             <WinDialog
                 movesCount={movesCount}
