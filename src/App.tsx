@@ -78,9 +78,11 @@ function App() {
             handleCardsMatch(matchedValue);
         }
 
-        if (flippedCards.current.length === 3) {
+        if (flippedCards.current.length === 2) {
             setMovesCount((prevMovesCount) => ++prevMovesCount);
+        }
 
+        if (flippedCards.current.length === 3) {
             setCards((prevCards) =>
                 prevCards.map((prevCard) => {
                     return prevCard.id === id
@@ -91,23 +93,14 @@ function App() {
         }
     };
 
-    const handleCardsMatch = useCallback(
-        (matchedValue: string) => {
-            const isLastPairMatch = guessedCount.current === cards.length / 2 - 1;
-
-            if (isLastPairMatch) {
-                setMovesCount((prevMovesCount) => ++prevMovesCount);
-            }
-
-            guessedCount.current++;
-            setCards((prevCards) =>
-                prevCards.map((prevCard) =>
-                    prevCard.value === matchedValue ? { ...prevCard, isGuessed: true } : prevCard
-                )
-            );
-        },
-        [cards.length]
-    );
+    const handleCardsMatch = useCallback((matchedValue: string) => {
+        guessedCount.current++;
+        setCards((prevCards) =>
+            prevCards.map((prevCard) =>
+                prevCard.value === matchedValue ? { ...prevCard, isGuessed: true } : prevCard
+            )
+        );
+    }, []);
 
     const isMatch = (flippedCards: Card[]) => flippedCards[0].value === flippedCards[1].value;
 
