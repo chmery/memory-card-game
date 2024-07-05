@@ -17,7 +17,7 @@ export const BoardSizeSelect = ({ selectedSize, onSelect }: Props) => {
                         key={i}
                         onClick={() => onSelect(size)}
                         className={`text-center px-5 py-2 bg-secondary400 rounded-lg font-semibold hover:bg-secondary200 transition ${
-                            selectedSize === size && "bg-secondary200"
+                            selectedSize === size && "bg-[#79798E]"
                         }`}
                     >
                         {size}
