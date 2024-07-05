@@ -91,14 +91,23 @@ function App() {
         }
     };
 
-    const handleCardsMatch = useCallback((matchedValue: string) => {
-        guessedCount.current++;
-        setCards((prevCards) =>
-            prevCards.map((prevCard) =>
-                prevCard.value === matchedValue ? { ...prevCard, isGuessed: true } : prevCard
-            )
-        );
-    }, []);
+    const handleCardsMatch = useCallback(
+        (matchedValue: string) => {
+            const isLastPairMatch = guessedCount.current === cards.length / 2 - 1;
+
+            if (isLastPairMatch) {
+                setMovesCount((prevMovesCount) => ++prevMovesCount);
+            }
+
+            guessedCount.current++;
+            setCards((prevCards) =>
+                prevCards.map((prevCard) =>
+                    prevCard.value === matchedValue ? { ...prevCard, isGuessed: true } : prevCard
+                )
+            );
+        },
+        [cards.length]
+    );
 
     const isMatch = (flippedCards: Card[]) => {
         return flippedCards[0].value === flippedCards[1].value ? true : false;
