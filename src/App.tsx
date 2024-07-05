@@ -78,7 +78,7 @@ function App() {
             handleCardsMatch(matchedValue);
         }
 
-        if (flippedCards.current.length === 2) {
+        if (flippedCards.current.length === 3) {
             setMovesCount((prevMovesCount) => ++prevMovesCount);
 
             setCards((prevCards) =>

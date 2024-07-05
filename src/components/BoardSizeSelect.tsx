@@ -1,3 +1,5 @@
+import { cn } from "../utils/cn";
+
 export type BoardSize = `${number}x${number}`;
 
 const BOARD_SIZES: BoardSize[] = ["4x4", "4x5", "4x6"];
@@ -16,10 +18,10 @@ export const BoardSizeSelect = ({ selectedSize, onSelect }: Props) => {
                     <button
                         key={i}
                         onClick={() => onSelect(size)}
-                        className={`text-center px-5 py-2 bg-secondary400 rounded-lg font-semibold hover:bg-secondary200 transition flex-1`}
-                        style={{
-                            background: `${selectedSize === size ? "#79798E" : ""}`,
-                        }}
+                        className={cn(
+                            "text-center px-5 py-2 bg-secondary400 rounded-lg font-semibold hover:bg-secondary200 transition flex-1",
+                            selectedSize === size && "bg-secondary200"
+                        )}
                     >
                         {size}
                     </button>

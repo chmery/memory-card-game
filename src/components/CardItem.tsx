@@ -1,4 +1,5 @@
 import { Card } from "../App";
+import { cn } from "../utils/cn";
 
 interface Props {
     card: Card;
@@ -17,19 +18,18 @@ export const CardItem = ({ card, onFlip }: Props) => {
     return (
         <div className="[perspective:1000px]" onClick={() => handleFlip(card.id)}>
             <div
-                className={`${isValueVisible ? "[transform:rotateY(180deg)]" : ""} ${
-                    canFlip ? "cursor-pointer" : ""
-                }
-                relative [transform-style:preserve-3d] transition-all duration-500 flex items-center justify-center bg-primary600 aspect-square text-3xl sm:text-6xl rounded-lg`}
-                style={{
-                    background: `${card.isGuessed ? "#9898D9" : ""}`,
-                }}
+                className={cn(
+                    "relative [transform-style:preserve-3d] transition-all duration-500 filter flex items-center justify-center bg-primary600 aspect-square text-3xl sm:text-6xl rounded-lg",
+                    isValueVisible && "[transform:rotateY(180deg)] bg-primary300",
+                    canFlip && "cursor-pointer",
+                    card.isGuessed && "bg-secondary700"
+                )}
             >
                 <div className="absolute [backface-visibility:hidden] [transform:rotateX(0deg)] font-black text-primary300">
                     ?
                 </div>
                 <div className="absolute [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                    {card.value}
+                    {!card.isGuessed && card.value}
                 </div>
             </div>
         </div>
