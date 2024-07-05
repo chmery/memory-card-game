@@ -14,7 +14,7 @@ export const WinDialog = ({ isOpen, onOpenChange, onReset, time, movesCount }: P
     return (
         <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
             <Dialog.Portal>
-                <Dialog.Overlay className="bg-[#121213bf] fixed inset-0" />
+                <Dialog.Overlay className="bg-[#121213d2] fixed inset-0" />
                 <Dialog.Content className="bg-secondary500 px-8 py-6 max-w-[25rem] min-w-[15rem] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl">
                     <Dialog.Title className="text-center font-black text-2xl">
                         You won! 🥳

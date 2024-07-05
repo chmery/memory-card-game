@@ -78,7 +78,7 @@ function App() {
             handleCardsMatch(matchedValue);
         }
 
-        if (flippedCards.current.length === 3) {
+        if (flippedCards.current.length === 2) {
             setMovesCount((prevMovesCount) => ++prevMovesCount);
 
             setCards((prevCards) =>
@@ -109,9 +109,7 @@ function App() {
         [cards.length]
     );
 
-    const isMatch = (flippedCards: Card[]) => {
-        return flippedCards[0].value === flippedCards[1].value ? true : false;
-    };
+    const isMatch = (flippedCards: Card[]) => flippedCards[0].value === flippedCards[1].value;
 
     const handleReset = useCallback(() => {
         setCards(getNewBoard);
