@@ -19,8 +19,11 @@ export const CardItem = ({ card, onFlip }: Props) => {
             <div
                 className={`${isValueVisible ? "[transform:rotateY(180deg)]" : ""} ${
                     canFlip ? "cursor-pointer" : ""
-                } ${card.isGuessed && "bg-primary300"}    
+                }
                 relative [transform-style:preserve-3d] transition-all duration-500 flex items-center justify-center bg-primary600 aspect-square text-3xl sm:text-6xl rounded-lg`}
+                style={{
+                    background: `${card.isGuessed ? "#9898D9" : ""}`,
+                }}
             >
                 <div className="absolute [backface-visibility:hidden] [transform:rotateX(0deg)] font-black text-primary300">
                     ?
