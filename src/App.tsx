@@ -74,8 +74,7 @@ function App() {
         flippedCards.current = updatedCards.filter((card) => card.isFlipped === true);
 
         if (flippedCards.current.length === 2 && isMatch(flippedCards.current)) {
-            const matchedValue = flippedCards.current[0].value;
-            handleCardsMatch(matchedValue);
+            handleCardsMatch(flippedCards.current);
         }
 
         if (flippedCards.current.length === 2) {
@@ -93,8 +92,10 @@ function App() {
         }
     };
 
-    const handleCardsMatch = useCallback((matchedValue: string) => {
+    const handleCardsMatch = useCallback((flippedCards: Card[]) => {
         guessedCount.current++;
+        const matchedValue = flippedCards[0].value;
+
         setCards((prevCards) =>
             prevCards.map((prevCard) =>
                 prevCard.value === matchedValue ? { ...prevCard, isGuessed: true } : prevCard
@@ -118,6 +119,25 @@ function App() {
     };
 
     const handleBoardSizeSelect = (selectedSize: BoardSize) => setBoardSize(selectedSize);
+
+    useEffect(() => {
+        const hideFlippedCards = () => {
+            flippedCards.current = [];
+            setCards((prevCards) =>
+                prevCards.map((prevCard) =>
+                    prevCard.isFlipped ? { ...prevCard, isFlipped: false } : prevCard
+                )
+            );
+        };
+
+        let timeout: number;
+
+        if (flippedCards.current?.length === 2) {
+            timeout = setTimeout(() => hideFlippedCards(), 1000);
+        }
+
+        return () => clearTimeout(timeout);
+    }, [cards]);
 
     useEffect(() => {
         handleReset();
