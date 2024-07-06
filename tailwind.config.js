@@ -10,7 +10,19 @@ export default {
             primary300: "#9898D9",
             primary600: "#5C5C9A",
         },
-        extend: {},
+        extend: {
+            animation: {
+                match: "match 0.5s ease-in-out forwards",
+            },
+            keyframes: {
+                match: {
+                    "0%": { transform: "scale(1)" },
+                    "25%": { transform: "scale(0.9)" },
+                    "50%": { transform: "scale(1.05)" },
+                    "100%": { transform: "scale(0)" },
+                },
+            },
+        },
     },
     plugins: [],
 };

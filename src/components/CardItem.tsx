@@ -22,14 +22,19 @@ export const CardItem = ({ card, onFlip }: Props) => {
                     "relative [transform-style:preserve-3d] transition-all duration-500 filter flex items-center justify-center bg-primary600 aspect-square text-3xl sm:text-6xl rounded-lg",
                     isValueVisible && "[transform:rotateY(180deg)] bg-primary300",
                     canFlip && "cursor-pointer",
-                    card.isGuessed && "bg-secondary700"
+                    card.isGuessed && "animate-match"
                 )}
             >
                 <div className="absolute [backface-visibility:hidden] [transform:rotateX(0deg)] font-black text-primary300">
                     ?
                 </div>
-                <div className="absolute [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                    {!card.isGuessed && card.value}
+                <div
+                    className={cn(
+                        "absolute [backface-visibility:hidden] [transform:rotateY(180deg)]",
+                        card.isGuessed && "[backface-visibility:visible] [transform:rotateY(0deg)]"
+                    )}
+                >
+                    {card.value}
                 </div>
             </div>
         </div>
